@@ -18,8 +18,8 @@ switch($path) {
             $cryptos = supported_cryptos();
             $response = $cryptos;
         } catch (Exception $e) {
-            $error = true;
-            var_dump($e->getMessage());
+            // $error = true;
+            $response = json_encode(array('error' => 'true', 'message' => $e->getMessage()));
         }
         break;
     case 'supported_fiats':
@@ -27,27 +27,30 @@ switch($path) {
             $fiats = supported_fiats();
             $response = $fiats;
         } catch (Exception $e) {
-            $error = true;
-            var_dump($e->getMessage());
+            // $error = true;
+            $response = json_encode(array('error' => 'true', 'message' => $e->getMessage()));
         }
         break;
     case 'quote':
         try {
             $quote = get_quote();
-            $results = $quote;
+            $response = $quote;
         } catch (Exception $e) {
-            $error = true;
-            var_dump($e->getMessage());
+            // $error = true;
+            $response = json_encode(array('error' => 'true', 'message' => $e->getMessage()));
         }
         break;
     case 'order':
         try {
-            $quote = get_quote();
+            // $quote = get_quote();
             $order = place_order();
-            $resposne = $order;
+            // $order = json_decode($order);
+            // $order->quote = json_decode($quote);
+            // $order = json_encode($order);
+            $response = $order;
         } catch (Exception $e) {
-            $error = true;
-            var_dump($e->getMessage());
+            // $error = true;
+            $response = json_encode(array('error' => 'true', 'message' => $e->getMessage()));
         }
         break;
     case 'redirect':
@@ -61,8 +64,8 @@ switch($path) {
             $reponse = redirect($_PAYMENT_ID);
             $redirect = true;
         } catch (Exception $e) {
-            $error = true;
-            var_dump($e->getMessage());
+            // $error = true;
+            $response = json_encode(array('error' => 'true', 'message' => $e->getMessage()));
         }
         break;
     case 'success':
@@ -77,8 +80,8 @@ switch($path) {
                 }
             }
         } catch (Exception $e) {
-            $error = true;
-            var_dump($e->getMessage());
+            // $error = true;
+            $response = json_encode(array('error' => 'true', 'message' => $e->getMessage()));
         }
         break;
     case 'failure':
@@ -93,16 +96,17 @@ switch($path) {
                 }
             }
         } catch (Exception $e) {
-            $error = true;
-            var_dump($e->getMessage());
+            // $error = true;
+            $response = json_encode(array('error' => 'true', 'message' => $e->getMessage()));
         }
         break;
     default:
+        // $error = true;
         $response = json_encode(array('error' => 'true', 'message' => 'No route provided'));
         break;
 }
 
-if (!$error && !$redirect) {
+if ((!$error && !$redirect) || ($response === FALSE || is_null($reponse))) {
     header('Content-Type: application/json; charset=utf-8');
 }
 echo $response;
