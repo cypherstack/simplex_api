@@ -8,7 +8,7 @@ $path = array_key_exists(2, $path) ? $path[2] : $path[1];
 $path = strpos($path, '?') ? substr($path, 0, strpos($path, '?')) : $path;
 // TODO error handle if no path given
 
-$response = '';
+$response = null;
 $error = false;
 $redirect = false;
 
@@ -65,8 +65,40 @@ switch($path) {
             var_dump($e->getMessage());
         }
         break;
+    case 'success':
+        try {
+            $reponse = success();
+            $redirect = true;
+            if (!gettype($response) === 'string') {
+                if (!array_key_exists('error', $reponse)) { // TODO correct error detection and handling here
+                    if ($response['error']) {
+                        $redirect = false;
+                    }
+                }
+            }
+        } catch (Exception $e) {
+            $error = true;
+            var_dump($e->getMessage());
+        }
+        break;
+    case 'failure':
+        try {
+            $reponse = failure();
+            $redirect = true;
+            if (!gettype($response) === 'string') {
+                if (!array_key_exists('error', $reponse)) { // TODO correct error detection and handling here
+                    if ($response['error']) {
+                        $redirect = false;
+                    }
+                }
+            }
+        } catch (Exception $e) {
+            $error = true;
+            var_dump($e->getMessage());
+        }
+        break;
     default:
-        $response = json_encode(array('error' => 'true', 'message' => 'Error redirecting to checkout'));
+        $response = json_encode(array('error' => 'true', 'message' => 'No route provided'));
         break;
 }
 

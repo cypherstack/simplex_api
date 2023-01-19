@@ -252,6 +252,43 @@ function redirect(
     return $response;
 }
 
+/**
+ * Show Simplex checkout success page
+ *
+ * @since 0.0.1
+ * @return dynamic String or json error object
+ */
+function success() {
+    // TODO take parameters to show printable receipt
+
+    try {
+        require_once 'templates/success.php';
+        $response = success_template();
+    } catch (Exception $e) {
+        $response = json_encode(array('error' => 'true', 'message' => 'Internal error showing checkout success page'));
+        var_dump($e->getMessage());
+    }
+    return $response;
+}
+
+/**
+ * Show Simplex checkout failure page
+ *
+ * @since 0.0.1
+ * @return dynamic String or json error object
+ */
+function failure() {
+    // TODO take parameters to errors
+    try {
+        require_once 'templates/failure.php';
+        $response = failure_template();
+    } catch (Exception $e) {
+        $response = json_encode(array('error' => 'true', 'message' => 'Internal error showing checkout failure page'));
+        var_dump($e->getMessage());
+    }
+    return $response;
+}
+
 function guidv4() { // See https://stackoverflow.com/a/15875555
     $data = openssl_random_pseudo_bytes(16);
 

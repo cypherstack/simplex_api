@@ -20,7 +20,7 @@ function redirect_template($_PAYMENT_ID, $_RETURN_URL_SUCCESS, $_RETURN_URL_FAIL
         </script>
     </body>
 </html>
-    EOD;
+EOD;
     return $html;
 }
 
