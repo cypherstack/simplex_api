@@ -200,8 +200,8 @@ function get_quote(
  * @return json Simplex order object
  */
 function place_order(
-    $_QUOTE_ID,
-    $_ADDRESS,
+    $_QUOTE_ID = null,
+    $_ADDRESS = null,
     $_PAYMENT_ID = null,
     $_ORDER_ID = null,
     $_CRYPTO_TICKER = null,
@@ -220,8 +220,28 @@ function place_order(
     //      --header 'content-type: application/json' \
     //      -d '{"account_details": {"app_provider_id": "$PUBLIC_KEY", "app_version_id": "123", "app_end_user_id": "01e7a0b9-8dfc-4988-a28d-84a34e5f0a63", "signup_login": {"timestamp": "1994-11-05T08:15:30-05:00", "ip": "207.66.86.226"}}, "transaction_details": {"payment_details": {"quote_id": "3b58f4b4-ed6f-447c-b96a-ffe97d7b6803", "payment_id": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa", "order_id": "789", "original_http_ref_url": "https://stackwallet.com/simplex", "destination_wallet": {"currency": "BTC", "address": "bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq"}}}}'
 
+    if (is_null($_QUOTE_ID)) {
+        if (!array_key_exists('QUOTE_ID', $_REQUEST)) {
+            return json_encode(array('error' => 'true', 'message' => 'Error placing order, no quote ID provided'));
+        }
+    }
+    if (is_null($_ADDRESS)) {
+        if (!array_key_exists('ADDRESS', $_REQUEST)) {
+            return json_encode(array('error' => 'true', 'message' => 'Error placing order, no address provided'));
+        }
+    }
+    if (is_null($_CRYPTO_TICKER)) {
+        if (!array_key_exists('ADDRESS', $_REQUEST)) {
+            return json_encode(array('error' => 'true', 'message' => 'Error placing order, no crypto ticker provided'));
+        }
+    }
+
     global $PUBLIC_KEY, $VERSION, $USER_ID, $SIGNUP_TIMESTAMP, $REFERRAL_IP, $QUOTE_ID, $PAYMENT_ID, $ORDER_ID, $REFERRER, $CRYPTO_TICKER, $ADDRESS, $API_KEY;
+    $_QUOTE_ID = is_null($_QUOTE_ID) ? array_key_exists('QUOTE_ID', $_REQUEST) ? $_REQUEST['QUOTE_ID'] : $QUOTE_ID : $_QUOTE_ID;
+    $_ADDRESS = is_null($_ADDRESS) ? array_key_exists('ADDRESS', $_REQUEST) ? $_REQUEST['ADDRESS'] : $ADDRESS : $_ADDRESS;
+    $_CRYPTO_TICKER = is_null($_CRYPTO_TICKER) ? array_key_exists('CRYPTO_TICKER', $_REQUEST) ? $_REQUEST['CRYPTO_TICKER'] : $CRYPTO_TICKER : $_CRYPTO_TICKER;
     $_PAYMENT_ID = is_null($_PAYMENT_ID) ? array_key_exists('PAYMENT_ID', $_REQUEST) ? $_REQUEST['PAYMENT_ID'] : $PAYMENT_ID : $_PAYMENT_ID;
+    $_CRYPTO_TICKER = is_null($_CRYPTO_TICKER) ? array_key_exists('CRYPTO_TICKER', $_REQUEST) ? $_REQUEST['CRYPTO_TICKER'] : $CRYPTO_TICKER : $_CRYPTO_TICKER;
     $_ORDER_ID = is_null($_ORDER_ID) ? array_key_exists('ORDER_ID', $_REQUEST) ? $_REQUEST['ORDER_ID'] : $ORDER_ID : $_ORDER_ID;
     $_USER_ID = is_null($_USER_ID) ? array_key_exists('USER_ID', $_REQUEST) ? $_REQUEST['USER_ID'] : $USER_ID : $_USER_ID;
     $_SIGNUP_TIMESTAMP = is_null($_SIGNUP_TIMESTAMP) ? array_key_exists('SIGNUP_TIMESTAMP', $_REQUEST) ? $_REQUEST['SIGNUP_TIMESTAMP'] : $SIGNUP_TIMESTAMP : $_SIGNUP_TIMESTAMP;
