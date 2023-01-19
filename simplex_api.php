@@ -33,6 +33,8 @@ $QUOTE_ID = 'e5440c77-b669-48d5-bc5c-d2f7417434bb'; // Set later in get_quote()
 $PAYMENT_ID = guidv4();
 $ORDER_ID = guidv4();
 
+// TODO validate all of the above
+
 /**
  * Get supported cryptocurrencies
  *
@@ -70,7 +72,7 @@ function supported_cryptos(?string $_PUBLIC_KEY = null) {
  *
  * @since 0.0.1
  *
- * @param ?string $_PUBLIC_KEY Simplex public key string. Optional; null defaults to value in config.php
+ * @param ?string $_PUBLIC_KEY Simplex public key string. Optional, null defaults to value in config.php
  * @return json Simplex supported cryptos object
  */
 function supported_fiats(?string $_PUBLIC_KEY = null) {
@@ -227,7 +229,7 @@ function place_order() {
  * @param ?string $_RETURN_URL_SUCCESS URL to which to redirect upon success. Optional, null defaults to value in config.php
  * @param ?string $_RETURN_URL_FAIL URL to which to redirect upon failure. Optional, null defaults to value in config.php
  * @param ?string $_WALLET_ID Partner/wallet ID from Simplex.  Defaults. Optional, null defaults to value in config.php
- * @return json Object
+ * @return dynamic String or json error object
  */
 function redirect(
     string $_PAYMENT_ID,
