@@ -218,6 +218,40 @@ function place_order() {
     }
 }
 
+/**
+ * Redirect to Simplex checkout page
+ *
+ * @since 0.0.1
+ *
+ * @param string $_PAYMENT_ID Payment ID to which to redirect
+ * @param ?string $_RETURN_URL_SUCCESS URL to which to redirect upon success. Optional, null defaults to value in config.php
+ * @param ?string $_RETURN_URL_FAIL URL to which to redirect upon failure. Optional, null defaults to value in config.php
+ * @param ?string $_WALLET_ID Partner/wallet ID from Simplex.  Defaults. Optional, null defaults to value in config.php
+ * @return json Object
+ */
+function redirect(
+    string $_PAYMENT_ID,
+    ?string $_RETURN_URL_SUCCESS = null,
+    ?string $_RETURN_URL_FAIL = null,
+    ?string $_WALLET_ID = null
+) {
+    global $PUBLIC_KEY, $VERSION, $USER_ID, $SIGNUP_TIMESTAMP, $REFERRAL_IP, $QUOTE_ID, $PAYMENT_ID, $ORDER_ID, $REFERRER, $CRYPTO_TICKER, $ADDRESS, $API_KEY;
+    $_PAYMENT_ID = is_null($_PAYMENT_ID) ? array_key_exists('_PAYMENT_ID', $_REQUEST) ? $_REQUEST['_PAYMENT_ID'] : $_PAYMENT_ID : $PAYMENT_ID;
+    $_RETURN_URL_SUCCESS = is_null($_RETURN_URL_SUCCESS) ? array_key_exists('_RETURN_URL_SUCCESS', $_REQUEST) ? $_REQUEST['_RETURN_URL_SUCCESS'] : $_RETURN_URL_SUCCESS : $RETURN_URL_SUCCESS;
+    $_RETURN_URL_FAIL = is_null($_RETURN_URL_FAIL) ? array_key_exists('_RETURN_URL_FAIL', $_REQUEST) ? $_REQUEST['_RETURN_URL_FAIL'] : $_RETURN_URL_FAIL : $RETURN_URL_FAIL;
+    $_WALLET_ID = is_null($_WALLET_ID) ? array_key_exists('_WALLET_ID', $_REQUEST) ? $_REQUEST['_WALLET_ID'] : $_WALLET_ID : $WALLET_ID;
+    // TODO sanitize $_REQUEST inputs above
+
+    try {
+        include 'templates/redirect.php';
+        $response = redirect_template($_PAYMENT_ID, $_RETURN_URL_SUCCESS, $_RETURN_URL_FAIL, $_WALLET_ID);
+    } catch (Exception $e) {
+        $response = json_encode(array('error' => 'true', 'message' => 'Internal error redirecting to checkout'));
+        var_dump($e->getMessage());
+    }
+    return $response;
+}
+
 function guidv4() { // See https://stackoverflow.com/a/15875555
     $data = openssl_random_pseudo_bytes(16);
 

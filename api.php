@@ -10,6 +10,7 @@ $path = strpos($path, '?') ? substr($path, 0, strpos($path, '?')) : $path;
 
 $response = '';
 $error = false;
+$redirect = false;
 
 switch($path) {
     case 'supported_cryptos':
@@ -49,12 +50,27 @@ switch($path) {
             var_dump($e->getMessage());
         }
         break;
+    case 'redirect':
+        try {
+            if (!array_key_exists('PAYMENT_ID', $_REQUEST)) {
+                $response = json_encode(array('error' => 'true', 'message' => 'Payment ID needed to redirect'));
+                break;
+            }
+            $_PAYMENT_ID = array_key_exists('PAYMENT_ID', $_REQUEST) ? $_REQUEST['PAYMENT_ID'] : $PAYMENT_ID;
+            // TODO sanitize $_REQUEST input
+            $reponse = redirect($_PAYMENT_ID);
+            $redirect = true;
+        } catch (Exception $e) {
+            $error = true;
+            var_dump($e->getMessage());
+        }
+        break;
     default:
         $response = json_encode(array('error' => 'true', 'message' => 'Error redirecting to checkout'));
         break;
 }
 
-if (!$error) {
+if (!$error && !$redirect) {
     header('Content-Type: application/json; charset=utf-8');
 }
 echo $response;
