@@ -50,7 +50,7 @@ switch($path) {
         }
         break;
     default:
-        $result = json_encode(array('error' => 'true', 'message' => 'No route provided'));
+        $response = json_encode(array('error' => 'true', 'message' => 'Error redirecting to checkout'));
         break;
 }
 
