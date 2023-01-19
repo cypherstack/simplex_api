@@ -25,8 +25,9 @@ include 'config.php';
 
 // TODO get all of the below from parameters/wallet
 $CRYPTO_TICKER = 'BTC';
-$CRYPTO_AMOUNT = 0.0042779;
 $FIAT_TICKER = 'USD';
+$REQUESTED_TICKER = 'BTC';
+$REQUESTED_AMOUNT = 0.0042779;
 $ADDRESS = 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq'; // TODO change to a good donation address; should never be used
 $VERSION = '0.0.1'; 
 $USER_ID = guidv4();
@@ -134,7 +135,8 @@ function supported_fiats(?string $_PUBLIC_KEY = null) {
  *
  * @param ?string $_FIAT_TICKER 
  * @param ?string $_CRYPTO_TICKER 
- * @param ?float $_CRYPTO_AMOUNT 
+ * @param ?string $_REQUESTED_TICKER 
+ * @param ?float $_REQUESTED_AMOUNT 
  * @param ?string $_USER_ID 
  * @param ?string $_WALLET_ID 
  * @param ?string $_API_KEY 
@@ -143,7 +145,8 @@ function supported_fiats(?string $_PUBLIC_KEY = null) {
 function get_quote(
     ?string $_FIAT_TICKER = null,
     ?string $_CRYPTO_TICKER = null,
-    ?float $_CRYPTO_AMOUNT = null,
+    ?string $_REQUESTED_TICKER = null,
+    ?float $_REQUESTED_AMOUNT = null,
     ?string $_USER_ID = null,
     ?string $_WALLET_ID = null,
     ?string $_API_KEY = null
@@ -155,10 +158,11 @@ function get_quote(
     //      --header 'content-type: application/json' \
     //      -d '{"end_user_id": "9e4ba9c9-5a06-4a1e-8e1c-ad096b31543d", "digital_currency": "BTC", "fiat_currency": "USD", "requested_currency": "BTC", "requested_amount": 0.00411956, "wallet_id": "stackwalet", "client_ip": "207.66.86.226"}'
 
-    global $USER_ID, $CRYPTO_TICKER, $FIAT_TICKER, $CRYPTO_AMOUNT, $WALLET_ID, $REFERRAL_IP, $API_KEY, $QUOTE_ID;
+    global $USER_ID, $CRYPTO_TICKER, $FIAT_TICKER, $REQUESTED_TICKER, $REQUESTED_AMOUNT, $WALLET_ID, $REFERRAL_IP, $API_KEY, $QUOTE_ID;
     $_FIAT_TICKER = is_null($_FIAT_TICKER) ? array_key_exists('FIAT_TICKER', $_REQUEST) ? $_REQUEST['FIAT_TICKER'] : $FIAT_TICKER : $_FIAT_TICKER;
     $_CRYPTO_TICKER = is_null($_CRYPTO_TICKER) ? array_key_exists('CRYPTO_TICKER', $_REQUEST) ? $_REQUEST['CRYPTO_TICKER'] : $CRYPTO_TICKER : $_CRYPTO_TICKER;
-    $_CRYPTO_AMOUNT = is_null($_CRYPTO_AMOUNT) ? array_key_exists('CRYPTO_AMOUNT', $_REQUEST) ? $_REQUEST['CRYPTO_AMOUNT'] : $CRYPTO_AMOUNT : $_CRYPTO_AMOUNT;
+    $_REQUESTED_TICKER = is_null($_REQUESTED_TICKER) ? array_key_exists('REQUESTED_TICKER', $_REQUEST) ? $_REQUEST['REQUESTED_TICKER'] : $REQUESTED_TICKER : $_REQUESTED_TICKER;
+    $_REQUESTED_AMOUNT = is_null($_REQUESTED_AMOUNT) ? array_key_exists('REQUESTED_AMOUNT', $_REQUEST) ? $_REQUEST['REQUESTED_AMOUNT'] : $REQUESTED_AMOUNT : $_REQUESTED_AMOUNT;
     $_USER_ID = is_null($_USER_ID) ? array_key_exists('USER_ID', $_REQUEST) ? $_REQUEST['USER_ID'] : $USER_ID : $_USER_ID;
     $_WALLET_ID = is_null($_WALLET_ID) ? array_key_exists('WALLET_ID', $_REQUEST) ? $_REQUEST['WALLET_ID'] : $WALLET_ID : $_WALLET_ID;
     $_API_KEY = is_null($_API_KEY) ? array_key_exists('API_KEY', $_REQUEST) ? $_REQUEST['API_KEY'] : $API_KEY : $_API_KEY;
@@ -169,8 +173,8 @@ function get_quote(
         'end_user_id' => $_USER_ID,
         'digital_currency' => $_CRYPTO_TICKER,
         'fiat_currency' => $_FIAT_TICKER,
-        'requested_currency' => $_CRYPTO_TICKER,
-        'requested_amount' => $_CRYPTO_AMOUNT,
+        'requested_currency' => $_REQUESTED_TICKER,
+        'requested_amount' => $_REQUESTED_AMOUNT,
         'wallet_id' => $_WALLET_ID,
         'client_ip' => $REFERRAL_IP,
     );
