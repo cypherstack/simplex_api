@@ -2,8 +2,13 @@
 
 // See README.md for usage
 // Methods:
-// get_supported_cryptos()
-// get_supported_fiats()
+// supported_cryptos()
+// supported_fiats()
+// get_quote()
+// place_order()
+// redirect()
+// success()
+// failure()
 
 // Set these values in config.php, which is included and overwrites these below
 // -----------------------------------------------------------------------------
@@ -64,10 +69,16 @@ function supported_cryptos(?string $_PUBLIC_KEY = null) {
         $result = file_get_contents($url, false, $context);
     } catch (Exception $e) {
         // $error = true;
-        $result = json_encode(array('error' => 'true', 'message' => $e->getMessage()));
+        $result = json_encode(array(
+            'error' => 'true',
+        'message' => $e->getMessage()
+    ));
     }
     if ($result === FALSE) {
-        return json_encode(array('error' => 'true', 'message' => 'Error calling supported_crypto_currencies'));
+        return json_encode(array(
+            'error' => 'true',
+            'message' => 'Error calling supported_crypto_currencies'
+        ));
     } else {
         return $result;
     }
@@ -101,10 +112,16 @@ function supported_fiats(?string $_PUBLIC_KEY = null) {
         $result = file_get_contents($url, false, $context);
     } catch (Exception $e) {
         // $error = true;
-        $result = json_encode(array('error' => 'true', 'message' => $e->getMessage()));
+        $result = json_encode(array(
+            'error' => 'true',
+            'message' => $e->getMessage()
+        ));
     }
     if ($result === FALSE) {
-        return json_encode(array('error' => 'true', 'message' => 'Error calling supported_fiat_currencies'));
+        return json_encode(array(
+            'error' => 'true',
+            'message' => 'Error calling supported_fiat_currencies'
+        ));
     } else {
         return $result;
     }
@@ -157,22 +174,26 @@ function get_quote(
         'wallet_id' => $_WALLET_ID,
         'client_ip' => $REFERRAL_IP,
     );
-    $options = array(
-        'http' => array(
-            'method'  => 'POST',
-            'header'  => "Authorization: ApiKey $_API_KEY\r\nContent-type: application/json\r\nAccept: application/json\r\n",
-            'content' => json_encode($data)
-        )
-    );
+    $options = array('http' => array(
+        'method'  => 'POST',
+        'header'  => "Authorization: ApiKey $_API_KEY\r\nContent-type: application/json\r\nAccept: application/json\r\n",
+        'content' => json_encode($data)
+    ));
     $context  = stream_context_create($options);
     try {
         $result = file_get_contents($url, false, $context);
     } catch (Exception $e) {
         // $error = true;
-        $result = json_encode(array('error' => 'true', 'message' => $e->getMessage()));
+        $result = json_encode(array(
+            'error' => 'true',
+            'message' => $e->getMessage()
+        ));
     }
     if ($result === FALSE) {
-        return json_encode(array('error' => 'true', 'message' => 'Error getting quote'));
+        return json_encode(array(
+            'error' => 'true',
+            'message' => 'Error getting quote'
+        ));
     } else {
         $json_result = json_decode($result);
         $QUOTE_ID = $json_result->quote_id; // Update global quote ID so we can get_quote(); place_order(); for debugging purposes
@@ -250,50 +271,67 @@ function place_order(
     $_REFERRAL_IP = is_null($_REFERRAL_IP) ? array_key_exists('REFERRAL_IP', $_REQUEST) ? $_REQUEST['REFERRAL_IP'] : $REFERRAL_IP : $_REFERRAL_IP;
     $_REFERRER = is_null($_REFERRER) ? array_key_exists('REFERRER', $_REQUEST) ? $_REQUEST['REFERRER'] : $REFERRER : $_REFERRER;
     $_API_KEY = is_null($_API_KEY) ? array_key_exists('API_KEY', $_REQUEST) ? $_REQUEST['API_KEY'] : $API_KEY : $_API_KEY;
-
-    // TODO default to ticker from quote
-    $_CRYPTO_TICKER = is_null($_CRYPTO_TICKER) ? array_key_exists('CRYPTO_TICKER', $_REQUEST) ? $_REQUEST['CRYPTO_TICKER'] : $CRYPTO_TICKER : $_CRYPTO_TICKER;
+    // TODO sanitize $_REQUEST inputs above
 
     $url = 'https://sandbox.test-simplexcc.com/wallet/merchant/v2/payments/partner/data';
     $data = array(
         'account_details' => array(
-            'app_provider_id' => $PUBLIC_KEY,
-            'app_version_id' => $VERSION,
-            'app_end_user_id' => $USER_ID,
+            'app_provider_id' => $_PUBLIC_KEY,
+            'app_version_id' => $_VERSION,
+            'app_end_user_id' => $_USER_ID,
             'signup_login' => array(
-                'timestamp' => $SIGNUP_TIMESTAMP,
-                'ip' => $REFERRAL_IP,
+                'timestamp' => $_SIGNUP_TIMESTAMP,
+                'ip' => $_REFERRAL_IP,
             )
         ),
         'transaction_details' => array(
             'payment_details' => array(
-                'quote_id' => $QUOTE_ID,
-                'payment_id' => $PAYMENT_ID,
-                'order_id' => $ORDER_ID,
-                'original_http_ref_url' => $REFERRER,
+                'quote_id' => $_QUOTE_ID,
+                'payment_id' => $_PAYMENT_ID,
+                'order_id' => $_ORDER_ID,
+                'original_http_ref_url' => $_REFERRER,
                 'destination_wallet' => array(
-                    'currency' => $CRYPTO_TICKER,
-                    'address' => $ADDRESS,
+                    'currency' => $_CRYPTO_TICKER,
+                    'address' => $_ADDRESS,
                 )
             )
         )
     );
-    $options = array(
-        'http' => array(
-            'method'  => 'POST',
-            'header'  => "Authorization: ApiKey $API_KEY\r\nContent-type: application/json\r\nAccept: application/json\r\n",
-            'content' => json_encode($data)
-        )
-    );
+    $options = array('http' => array(
+        'method'  => 'POST',
+        'header'  => "Authorization: ApiKey $_API_KEY\r\nContent-type: application/json\r\nAccept: application/json\r\n",
+        'content' => json_encode($data)
+    ));
     $context  = stream_context_create($options);
     try {
         $result = file_get_contents($url, false, $context);
+        if ($result) {
+            $result = json_decode($result);
+            $result->error = false;
+            $result->quoteId = $_QUOTE_ID;
+            $result->address = $_ADDRESS;
+            $result->paymentId = $_PAYMENT_ID;
+            $result->orderId = $_ORDER_ID;
+            $result->userId = $_USER_ID;
+            $result = json_encode($result);
+        } else {
+            return json_encode(array(
+                'error' => 'true',
+                'message' => 'Error placing order, bad request'
+            ));
+        }
     } catch (Exception $e) {
         // $error = true;
-        $result = json_encode(array('error' => 'true', 'message' => $e->getMessage()));
+        $result = json_encode(array(
+            'error' => 'true',
+            'message' => $e->getMessage()
+        ));
     }
     if ($result === FALSE) {
-        return json_encode(array('error' => 'true', 'message' => 'Error placing order'));
+        return json_encode(array(
+            'error' => 'true',
+            'message' => 'Error placing order'
+        ));
     } else {
         return $result;
     }
@@ -308,7 +346,7 @@ function place_order(
  * @param ?string $_RETURN_URL_SUCCESS URL to which to redirect upon success. Optional, null defaults to value in config.php
  * @param ?string $_RETURN_URL_FAIL URL to which to redirect upon failure. Optional, null defaults to value in config.php
  * @param ?string $_WALLET_ID Partner/wallet ID from Simplex.  Defaults. Optional, null defaults to value in config.php
- * @return dynamic String or json error object
+ * @return dynamic HTML string or json error object
  */
 function redirect(
     string $_PAYMENT_ID,
@@ -327,7 +365,10 @@ function redirect(
         include 'templates/redirect.php';
         $response = redirect_template($_PAYMENT_ID, $_RETURN_URL_SUCCESS, $_RETURN_URL_FAIL, $_WALLET_ID);
     } catch (Exception $e) {
-        $response = json_encode(array('error' => 'true', 'message' => 'Internal error redirecting to checkout'));
+        $response = json_encode(array(
+            'error' => 'true',
+            'message' => 'Internal error redirecting to checkout'
+        ));
         var_dump($e->getMessage());
     }
     return $response;
@@ -337,7 +378,7 @@ function redirect(
  * Show Simplex checkout success page
  *
  * @since 0.0.1
- * @return dynamic String or json error object
+ * @return dynamic HTML string or json error object
  */
 function success() {
     // TODO take parameters to show printable receipt
@@ -346,7 +387,9 @@ function success() {
         require_once 'templates/success.php';
         $response = success_template();
     } catch (Exception $e) {
-        $response = json_encode(array('error' => 'true', 'message' => 'Internal error showing checkout success page'));
+        $response = json_encode(array(
+            'error' => 'true',
+            'message' => 'Internal error showing checkout success page'));
         var_dump($e->getMessage());
     }
     return $response;
@@ -356,7 +399,7 @@ function success() {
  * Show Simplex checkout failure page
  *
  * @since 0.0.1
- * @return dynamic String or json error object
+ * @return dynamic HTML string or json error object
  */
 function failure() {
     // TODO take parameters to errors
@@ -364,7 +407,10 @@ function failure() {
         require_once 'templates/failure.php';
         $response = failure_template();
     } catch (Exception $e) {
-        $response = json_encode(array('error' => 'true', 'message' => 'Internal error showing checkout failure page'));
+        $response = json_encode(array(
+            'error' => 'true',
+            'message' => 'Internal error showing checkout failure page'
+        ));
         var_dump($e->getMessage());
     }
     return $response;

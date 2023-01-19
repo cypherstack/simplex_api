@@ -14,7 +14,12 @@ try {
     var_dump($e->getMessage());
 }
 
-$response = json_encode(array('error' => $error, 'message' => $message, 'status' => ($error) ? 'offline' : 'online', 'response' => json_decode($response)));
+$response = json_encode(array(
+    'error' => $error,
+    'message' => $message,
+    'status' => ($error) ? 'offline' : 'online',
+    'response' => json_decode($response)
+));
 if (!$error) {
     header('Content-Type: application/json; charset=utf-8');
 }
