@@ -3,10 +3,10 @@
 require_once("simplex_api.php");
 // TODO test functions
 
-$route = isset($_REQUEST['ROUTE']) ? $_REQUEST['ROUTE'] : null;
-// $route = explode('/',$_SERVER["REQUEST_URI"]);
-// $route = array_key_exists(2, $route) ? $route[2] : $route[1];
-// $route = strpos($route, '?') ? substr($route, 0, strpos($route, '?')) : $route;
+// $route = isset($_REQUEST['ROUTE']) ? $_REQUEST['ROUTE'] : null;
+$route = explode('/',$_SERVER["REQUEST_URI"]);
+$route = array_key_exists(2, $route) ? $route[2] : $route[1];
+$route = strpos($route, '?') ? substr($route, 0, strpos($route, '?')) : $route;
 // TODO error handle if no path given
 
 $response = null;
