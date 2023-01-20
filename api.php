@@ -54,6 +54,9 @@ switch($path) {
     case 'order':
         try {
             $_QUOTE_ID = isset($_REQUEST['QUOTE_ID']) ? $_REQUEST['QUOTE_ID'] : $QUOTE_ID;
+            if (!$_QUOTE_ID) {
+                throw new Exception('Quote ID not provided');
+            }
             $_ADDRESS = isset($_REQUEST['ADDRESS']) ? $_REQUEST['ADDRESS'] : $ADDRESS;
             $_CRYPTO_TICKER = isset($_REQUEST['CRYPTO_TICKER']) ? $_REQUEST['CRYPTO_TICKER'] : $CRYPTO_TICKER;
             // TODO sanitize $_REQUEST inputs above

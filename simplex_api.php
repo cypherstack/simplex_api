@@ -33,7 +33,7 @@ $VERSION = '0.0.1';
 $USER_ID = guidv4();
 $SIGNUP_TIMESTAMP = '1994-11-05T08:15:30-05:00';
 
-$QUOTE_ID = 'e5440c77-b669-48d5-bc5c-d2f7417434bb'; // Set later in get_quote()
+$QUOTE_ID = null; // Set later in get_quote()
 
 // TODO save/return all of the below
 $PAYMENT_ID = guidv4();
