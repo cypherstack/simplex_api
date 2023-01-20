@@ -81,7 +81,7 @@ switch($route) {
             }
             $_PAYMENT_ID = isset($_REQUEST['PAYMENT_ID']) ? $_REQUEST['PAYMENT_ID'] : $PAYMENT_ID;
             // TODO sanitize $_REQUEST input
-            $reponse = redirect($_PAYMENT_ID);
+            $response = redirect($_PAYMENT_ID);
             $redirect = true;
         } catch (Exception $e) {
             // $error = true;
@@ -90,10 +90,10 @@ switch($route) {
         break;
     case 'success':
         try {
-            $reponse = success();
+            $response = success();
             $redirect = true;
             if (!gettype($response) === 'string') {
-                if (!array_key_exists('error', $reponse)) { // TODO correct error detection and handling here
+                if (!array_key_exists('error', $response)) { // TODO correct error detection and handling here
                     if ($response['error']) {
                         $redirect = false;
                     }
@@ -106,10 +106,10 @@ switch($route) {
         break;
     case 'failure':
         try {
-            $reponse = failure();
+            $response = failure();
             $redirect = true;
             if (!gettype($response) === 'string') {
-                if (!array_key_exists('error', $reponse)) { // TODO correct error detection and handling here
+                if (!array_key_exists('error', $response)) { // TODO correct error detection and handling here
                     if ($response['error']) {
                         $redirect = false;
                     }
@@ -126,7 +126,7 @@ switch($route) {
         break;
 }
 
-if ((!$error && !$redirect) || ($response === FALSE || is_null($reponse))) {
+if ((!$error && !$redirect) || ($response === FALSE || is_null($response))) {
     header('Content-Type: application/json; charset=utf-8');
 }
 echo $response;
