@@ -55,7 +55,7 @@ function supported_cryptos(?string $_PUBLIC_KEY = null) {
 
     // If $_PUBLIC_KEY not passed, use value in $_REQUEST (if it's there) or use global $PUBLIC_KEY as default
     global $PUBLIC_KEY;
-    $_PUBLIC_KEY = is_null($_PUBLIC_KEY) ? isset($_REQUEST['PUBLIC_KEY']) ? $_REQUEST['PUBLIC_KEY'] : $PUBLIC_KEY : $_PUBLIC_KEY;
+    $_PUBLIC_KEY = is_null($_PUBLIC_KEY) ? $PUBLIC_KEY : $_PUBLIC_KEY;
     // TODO sanitize $_REQUEST inputs above
 
     $url = "https://sandbox.test-simplexcc.com/v2/supported_crypto_currencies?public_key=$_PUBLIC_KEY";
@@ -98,7 +98,7 @@ function supported_fiats(?string $_PUBLIC_KEY = null) {
     //      --header 'accept: application/json'
 
     global $PUBLIC_KEY;
-    $_PUBLIC_KEY = is_null($_PUBLIC_KEY) ? isset($_REQUEST['PUBLIC_KEY']) ? $_REQUEST['PUBLIC_KEY'] : $PUBLIC_KEY : $_PUBLIC_KEY;
+    $_PUBLIC_KEY = is_null($_PUBLIC_KEY) ? $PUBLIC_KEY : $_PUBLIC_KEY;
     // TODO sanitize $_REQUEST inputs above
 
     $url = "https://sandbox.test-simplexcc.com/v2/supported_fiat_currencies?public_key=$_PUBLIC_KEY";
@@ -159,13 +159,13 @@ function get_quote(
     //      -d '{"end_user_id": "9e4ba9c9-5a06-4a1e-8e1c-ad096b31543d", "digital_currency": "BTC", "fiat_currency": "USD", "requested_currency": "BTC", "requested_amount": 0.00411956, "wallet_id": "stackwalet", "client_ip": "207.66.86.226"}'
 
     global $USER_ID, $CRYPTO_TICKER, $FIAT_TICKER, $REQUESTED_TICKER, $REQUESTED_AMOUNT, $WALLET_ID, $REFERRAL_IP, $API_KEY, $QUOTE_ID;
-    $_FIAT_TICKER = is_null($_FIAT_TICKER) ? isset($_REQUEST['FIAT_TICKER']) ? $_REQUEST['FIAT_TICKER'] : $FIAT_TICKER : $_FIAT_TICKER;
-    $_CRYPTO_TICKER = is_null($_CRYPTO_TICKER) ? isset($_REQUEST['CRYPTO_TICKER']) ? $_REQUEST['CRYPTO_TICKER'] : $CRYPTO_TICKER : $_CRYPTO_TICKER;
-    $_REQUESTED_TICKER = is_null($_REQUESTED_TICKER) ? isset($_REQUEST['REQUESTED_TICKER']) ? $_REQUEST['REQUESTED_TICKER'] : $REQUESTED_TICKER : $_REQUESTED_TICKER;
-    $_REQUESTED_AMOUNT = is_null($_REQUESTED_AMOUNT) ? isset($_REQUEST['REQUESTED_AMOUNT']) ? $_REQUEST['REQUESTED_AMOUNT'] : $REQUESTED_AMOUNT : $_REQUESTED_AMOUNT;
-    $_USER_ID = is_null($_USER_ID) ? isset($_REQUEST['USER_ID']) ? $_REQUEST['USER_ID'] : $USER_ID : $_USER_ID;
-    $_WALLET_ID = is_null($_WALLET_ID) ? isset($_REQUEST['WALLET_ID']) ? $_REQUEST['WALLET_ID'] : $WALLET_ID : $_WALLET_ID;
-    $_API_KEY = is_null($_API_KEY) ? isset($_REQUEST['API_KEY']) ? $_REQUEST['API_KEY'] : $API_KEY : $_API_KEY;
+    $_FIAT_TICKER = is_null($_FIAT_TICKER) ? $FIAT_TICKER : $_FIAT_TICKER;
+    $_CRYPTO_TICKER = is_null($_CRYPTO_TICKER) ? $CRYPTO_TICKER : $_CRYPTO_TICKER;
+    $_REQUESTED_TICKER = is_null($_REQUESTED_TICKER) ? $REQUESTED_TICKER : $_REQUESTED_TICKER;
+    $_REQUESTED_AMOUNT = is_null($_REQUESTED_AMOUNT) ? $REQUESTED_AMOUNT : $_REQUESTED_AMOUNT;
+    $_USER_ID = is_null($_USER_ID) ? $USER_ID : $_USER_ID;
+    $_WALLET_ID = is_null($_WALLET_ID) ? $WALLET_ID : $_WALLET_ID;
+    $_API_KEY = is_null($_API_KEY) ? $API_KEY : $_API_KEY;
     $_REFERRAL_IP = is_null($_REFERRAL_IP) ? getUserIP() : $_REFERRAL_IP;
     // TODO sanitize $_REQUEST inputs above
     
@@ -246,30 +246,30 @@ function place_order(
     //      --header 'content-type: application/json' \
     //      -d '{"account_details": {"app_provider_id": "$PUBLIC_KEY", "app_version_id": "123", "app_end_user_id": "01e7a0b9-8dfc-4988-a28d-84a34e5f0a63", "signup_login": {"timestamp": "1994-11-05T08:15:30-05:00", "ip": "207.66.86.226"}}, "transaction_details": {"payment_details": {"quote_id": "3b58f4b4-ed6f-447c-b96a-ffe97d7b6803", "payment_id": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa", "order_id": "789", "original_http_ref_url": "https://stackwallet.com/simplex", "destination_wallet": {"currency": "BTC", "address": "bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq"}}}}'
 
-    if (is_null($_QUOTE_ID) && !isset($_REQUEST['QUOTE_ID'])) {
+    if (is_null($_QUOTE_ID)) {
         return json_encode(array('error' => 'true', 'message' => 'Error placing order, no quote ID provided'));
     }
-    if (is_null($_ADDRESS) && !isset($_REQUEST['ADDRESS'])) {
+    if (is_null($_ADDRESS)) {
         return json_encode(array('error' => 'true', 'message' => 'Error placing order, no address provided'));
     }
-    if (is_null($_CRYPTO_TICKER) && !isset($_REQUEST['ADDRESS'])) {
+    if (is_null($_CRYPTO_TICKER)) {
         return json_encode(array('error' => 'true', 'message' => 'Error placing order, no crypto ticker provided'));
     }
 
-    global $PUBLIC_KEY, $VERSION, $USER_ID, $SIGNUP_TIMESTAMP, $REFERRAL_IP, $QUOTE_ID, $PAYMENT_ID, $ORDER_ID, $REFERRER, $CRYPTO_TICKER, $ADDRESS, $API_KEY;
-    $_QUOTE_ID = is_null($_QUOTE_ID) ? isset($_REQUEST['QUOTE_ID']) ? $_REQUEST['QUOTE_ID'] : $QUOTE_ID : $_QUOTE_ID;
-    $_ADDRESS = is_null($_ADDRESS) ? isset($_REQUEST['ADDRESS']) ? $_REQUEST['ADDRESS'] : $ADDRESS : $_ADDRESS;
-    $_CRYPTO_TICKER = is_null($_CRYPTO_TICKER) ? isset($_REQUEST['CRYPTO_TICKER']) ? $_REQUEST['CRYPTO_TICKER'] : $CRYPTO_TICKER : $_CRYPTO_TICKER;
-    $_PAYMENT_ID = is_null($_PAYMENT_ID) ? isset($_REQUEST['PAYMENT_ID']) ? $_REQUEST['PAYMENT_ID'] : $PAYMENT_ID : $_PAYMENT_ID;
-    $_CRYPTO_TICKER = is_null($_CRYPTO_TICKER) ? isset($_REQUEST['CRYPTO_TICKER']) ? $_REQUEST['CRYPTO_TICKER'] : $CRYPTO_TICKER : $_CRYPTO_TICKER;
-    $_ORDER_ID = is_null($_ORDER_ID) ? isset($_REQUEST['ORDER_ID']) ? $_REQUEST['ORDER_ID'] : $ORDER_ID : $_ORDER_ID;
-    $_USER_ID = is_null($_USER_ID) ? isset($_REQUEST['USER_ID']) ? $_REQUEST['USER_ID'] : $USER_ID : $_USER_ID;
-    $_SIGNUP_TIMESTAMP = is_null($_SIGNUP_TIMESTAMP) ? isset($_REQUEST['SIGNUP_TIMESTAMP']) ? $_REQUEST['SIGNUP_TIMESTAMP'] : $SIGNUP_TIMESTAMP : $_SIGNUP_TIMESTAMP;
-    $_PUBLIC_KEY = is_null($_PUBLIC_KEY) ? isset($_REQUEST['PUBLIC_KEY']) ? $_REQUEST['PUBLIC_KEY'] : $PUBLIC_KEY : $_PUBLIC_KEY;
-    $_VERSION = is_null($_VERSION) ? isset($_REQUEST['VERSION']) ? $_REQUEST['VERSION'] : $VERSION : $_VERSION;
-    $_REFERRAL_IP = is_null($_REFERRAL_IP) ? isset($_REQUEST['REFERRAL_IP']) ? $_REQUEST['REFERRAL_IP'] : $REFERRAL_IP : $_REFERRAL_IP;
-    $_REFERRER = is_null($_REFERRER) ? isset($_REQUEST['REFERRER']) ? $_REQUEST['REFERRER'] : $REFERRER : $_REFERRER;
-    $_API_KEY = is_null($_API_KEY) ? isset($_REQUEST['API_KEY']) ? $_REQUEST['API_KEY'] : $API_KEY : $_API_KEY;
+    global $PUBLIC_KEY, $VERSION, $USER_ID, $SIGNUP_TIMESTAMP, $QUOTE_ID, $PAYMENT_ID, $ORDER_ID, $REFERRER, $CRYPTO_TICKER, $ADDRESS, $API_KEY;
+    $_QUOTE_ID = is_null($_QUOTE_ID) ? $QUOTE_ID : $_QUOTE_ID;
+    $_ADDRESS = is_null($_ADDRESS) ? $ADDRESS : $_ADDRESS;
+    $_CRYPTO_TICKER = is_null($_CRYPTO_TICKER) ? $CRYPTO_TICKER : $_CRYPTO_TICKER;
+    $_PAYMENT_ID = is_null($_PAYMENT_ID) ? $PAYMENT_ID : $_PAYMENT_ID;
+    $_CRYPTO_TICKER = is_null($_CRYPTO_TICKER) ? $CRYPTO_TICKER : $_CRYPTO_TICKER;
+    $_ORDER_ID = is_null($_ORDER_ID) ? $ORDER_ID : $_ORDER_ID;
+    $_USER_ID = is_null($_USER_ID) ? $USER_ID : $_USER_ID;
+    $_SIGNUP_TIMESTAMP = is_null($_SIGNUP_TIMESTAMP) ? $SIGNUP_TIMESTAMP : $_SIGNUP_TIMESTAMP;
+    $_PUBLIC_KEY = is_null($_PUBLIC_KEY) ? $PUBLIC_KEY : $_PUBLIC_KEY;
+    $_VERSION = is_null($_VERSION) ? $VERSION : $_VERSION;
+    $_REFERRER = is_null($_REFERRER) ? $REFERRER : $_REFERRER;
+    $_API_KEY = is_null($_API_KEY) ? $API_KEY : $_API_KEY;
+    $_REFERRAL_IP = is_null($_REFERRAL_IP) ? getUserIP() : $_REFERRAL_IP;
     // TODO sanitize $_REQUEST inputs above
 
     $url = 'https://sandbox.test-simplexcc.com/wallet/merchant/v2/payments/partner/data';
@@ -355,10 +355,10 @@ function redirect(
     ?string $_WALLET_ID = null
 ) {
     global $PUBLIC_KEY, $VERSION, $USER_ID, $SIGNUP_TIMESTAMP, $REFERRAL_IP, $QUOTE_ID, $PAYMENT_ID, $ORDER_ID, $REFERRER, $CRYPTO_TICKER, $ADDRESS, $API_KEY;
-    $_PAYMENT_ID = is_null($_PAYMENT_ID) ? isset($_REQUEST['_PAYMENT_ID']) ? $_REQUEST['_PAYMENT_ID'] : $_PAYMENT_ID : $PAYMENT_ID;
-    $_RETURN_URL_SUCCESS = is_null($_RETURN_URL_SUCCESS) ? isset($_REQUEST['_RETURN_URL_SUCCESS']) ? $_REQUEST['_RETURN_URL_SUCCESS'] : $_RETURN_URL_SUCCESS : $RETURN_URL_SUCCESS;
-    $_RETURN_URL_FAIL = is_null($_RETURN_URL_FAIL) ? isset($_REQUEST['_RETURN_URL_FAIL']) ? $_REQUEST['_RETURN_URL_FAIL'] : $_RETURN_URL_FAIL : $RETURN_URL_FAIL;
-    $_WALLET_ID = is_null($_WALLET_ID) ? isset($_REQUEST['_WALLET_ID']) ? $_REQUEST['_WALLET_ID'] : $_WALLET_ID : $WALLET_ID;
+    $_PAYMENT_ID = is_null($_PAYMENT_ID) ? $_PAYMENT_ID : $PAYMENT_ID;
+    $_RETURN_URL_SUCCESS = is_null($_RETURN_URL_SUCCESS) ? $_RETURN_URL_SUCCESS : $RETURN_URL_SUCCESS;
+    $_RETURN_URL_FAIL = is_null($_RETURN_URL_FAIL) ? $_RETURN_URL_FAIL : $RETURN_URL_FAIL;
+    $_WALLET_ID = is_null($_WALLET_ID) ? $_WALLET_ID : $WALLET_ID;
     // TODO sanitize $_REQUEST inputs above
 
     try {
