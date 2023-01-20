@@ -16,7 +16,6 @@
 // $PUBLIC_KEY = 'Public Key';
 // $WALLET_ID = 'Wallet ID';
 // $REFERRER = 'https://example.com/simplex';
-// $REFERRAL_IP = '8.8.8.8';
 
 // $RETURN_URL_SUCCESS = 'https://example.com/success';
 // $RETURN_URL_FAILURE = 'https://example.com/failure';
@@ -149,7 +148,8 @@ function get_quote(
     ?float $_REQUESTED_AMOUNT = null,
     ?string $_USER_ID = null,
     ?string $_WALLET_ID = null,
-    ?string $_API_KEY = null
+    ?string $_API_KEY = null,
+    ?string $_REFERRAL_IP = null
 ) {
     // curl --request POST \
     //      --url https://sandbox.test-simplexcc.com/wallet/merchant/v2/quote \
@@ -166,6 +166,7 @@ function get_quote(
     $_USER_ID = is_null($_USER_ID) ? isset($_REQUEST['USER_ID']) ? $_REQUEST['USER_ID'] : $USER_ID : $_USER_ID;
     $_WALLET_ID = is_null($_WALLET_ID) ? isset($_REQUEST['WALLET_ID']) ? $_REQUEST['WALLET_ID'] : $WALLET_ID : $_WALLET_ID;
     $_API_KEY = is_null($_API_KEY) ? isset($_REQUEST['API_KEY']) ? $_REQUEST['API_KEY'] : $API_KEY : $_API_KEY;
+    $_REFERRAL_IP = is_null($_REFERRAL_IP) ? getUserIP() : $_REFERRAL_IP;
     // TODO sanitize $_REQUEST inputs above
     
     $url = 'https://sandbox.test-simplexcc.com/wallet/merchant/v2/quote';
@@ -176,7 +177,7 @@ function get_quote(
         'requested_currency' => $_REQUESTED_TICKER,
         'requested_amount' => $_REQUESTED_AMOUNT,
         'wallet_id' => $_WALLET_ID,
-        'client_ip' => $REFERRAL_IP,
+        'client_ip' => $_REFERRAL_IP,
     );
     $options = array('http' => array(
         'method'  => 'POST',
@@ -424,6 +425,28 @@ function guidv4() { // See https://stackoverflow.com/a/15875555
     $data[8] = chr(ord($data[8]) & 0x3f | 0x80); // set bits 6-7 to 10
 
     return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+}
+
+function getUserIP() { // See https://stackoverflow.com/a/13646735
+    // Get real visitor IP behind CloudFlare network
+    if (isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
+              $_SERVER['REMOTE_ADDR'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
+              $_SERVER['HTTP_CLIENT_IP'] = $_SERVER["HTTP_CF_CONNECTING_IP"];
+    }
+    $client  = @$_SERVER['HTTP_CLIENT_IP'];
+    $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
+    $remote  = $_SERVER['REMOTE_ADDR'];
+
+    if(filter_var($client, FILTER_VALIDATE_IP)) {
+        $ip = $client;
+    }
+    elseif(filter_var($forward, FILTER_VALIDATE_IP)) {
+        $ip = $forward;
+    } else {
+        $ip = $remote;
+    }
+
+    return $ip;
 }
 
 ?>

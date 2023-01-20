@@ -46,7 +46,8 @@ switch($route) {
             $_USER_ID = isset($_REQUEST['USER_ID']) ? $_REQUEST['USER_ID'] : $USER_ID;
             $_WALLET_ID = isset($_REQUEST['WALLET_ID']) ? $_REQUEST['WALLET_ID'] : $WALLET_ID;
             $_API_KEY = isset($_REQUEST['API_KEY']) ? $_REQUEST['API_KEY'] : $API_KEY;
-            $quote = get_quote($_FIAT_TICKER, $_CRYPTO_TICKER, $_REQUESTED_TICKER, $_REQUESTED_AMOUNT, $_USER_ID, $_WALLET_ID, $_API_KEY);
+            $_REFERRAL_IP = isset($_REQUEST['REFERRAL_IP']) ? $_REQUEST['REFERRAL_IP'] : getUserIP();
+            $quote = get_quote($_FIAT_TICKER, $_CRYPTO_TICKER, $_REQUESTED_TICKER, $_REQUESTED_AMOUNT, $_USER_ID, $_WALLET_ID, $_API_KEY, $_REFERRAL_IP);
             $response = $quote;
         } catch (Exception $e) {
             // $error = true;
