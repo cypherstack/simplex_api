@@ -126,7 +126,7 @@ switch($route) {
 }
 
 if ((!$error && !$redirect) || ($response === FALSE || is_null($reponse))) {
-    // header('Content-Type: application/json; charset=utf-8');
+    header('Content-Type: application/json; charset=utf-8');
 }
 echo $response;
 
