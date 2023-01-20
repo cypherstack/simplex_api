@@ -14,12 +14,13 @@ $error = false;
 $redirect = false;
 
 // TODO refactor all $_REQUEST handling into here
+// Parameter-handling duplicated here as troubleshooting for an issue where I wasn't able to read any POSTed params ... would like to refactor all param handling into one place
 
 switch($route) {
     case 'supported_cryptos':
         try {
-            $_API_KEY = isset($_REQUEST['API_KEY']) ? $_REQUEST['API_KEY'] : $API_KEY;
-            $cryptos = supported_cryptos($_API_KEY);
+            $_PUBLIC_KEY = isset($_REQUEST['PUBLIC_KEY']) ? $_REQUEST['PUBLIC_KEY'] : $PUBLIC_KEY;
+            $cryptos = supported_cryptos($_PUBLIC_KEY);
             $response = $cryptos;
         } catch (Exception $e) {
             // $error = true;
@@ -28,8 +29,8 @@ switch($route) {
         break;
     case 'supported_fiats':
         try {
-            $_API_KEY = isset($_REQUEST['API_KEY']) ? $_REQUEST['API_KEY'] : $API_KEY;
-            $fiats = supported_fiats($_API_KEY);
+            $_PUBLIC_KEY = isset($_REQUEST['PUBLIC_KEY']) ? $_REQUEST['PUBLIC_KEY'] : $PUBLIC_KEY;
+            $fiats = supported_fiats($_PUBLIC_KEY);
             $response = $fiats;
         } catch (Exception $e) {
             // $error = true;
