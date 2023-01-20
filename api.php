@@ -12,10 +12,13 @@ $response = null;
 $error = false;
 $redirect = false;
 
+// TODO refactor all $_REQUEST handling into here
+
 switch($path) {
     case 'supported_cryptos':
         try {
-            $cryptos = supported_cryptos();
+            $_API_KEY = isset($_REQUEST['API_KEY']) ? $_REQUEST['API_KEY'] : $API_KEY;
+            $cryptos = supported_cryptos($_API_KEY);
             $response = $cryptos;
         } catch (Exception $e) {
             // $error = true;
@@ -24,7 +27,8 @@ switch($path) {
         break;
     case 'supported_fiats':
         try {
-            $fiats = supported_fiats();
+            $_API_KEY = isset($_REQUEST['API_KEY']) ? $_REQUEST['API_KEY'] : $API_KEY;
+            $fiats = supported_fiats($_API_KEY);
             $response = $fiats;
         } catch (Exception $e) {
             // $error = true;
@@ -33,7 +37,14 @@ switch($path) {
         break;
     case 'quote':
         try {
-            $quote = get_quote();
+            $_FIAT_TICKER = isset($_REQUEST['FIAT_TICKER']) ? $_REQUEST['FIAT_TICKER'] : $FIAT_TICKER;
+            $_CRYPTO_TICKER = isset($_REQUEST['CRYPTO_TICKER']) ? $_REQUEST['CRYPTO_TICKER'] : $CRYPTO_TICKER;
+            $_REQUESTED_TICKER = isset($_REQUEST['REQUESTED_TICKER']) ? $_REQUEST['REQUESTED_TICKER'] : $REQUESTED_TICKER;
+            $_REQUESTED_AMOUNT = isset($_REQUEST['REQUESTED_AMOUNT']) ? $_REQUEST['REQUESTED_AMOUNT'] : $REQUESTED_AMOUNT;
+            $_USER_ID = isset($_REQUEST['USER_ID']) ? $_REQUEST['USER_ID'] : $USER_ID;
+            $_WALLET_ID = isset($_REQUEST['WALLET_ID']) ? $_REQUEST['WALLET_ID'] : $WALLET_ID;
+            $_API_KEY = isset($_REQUEST['API_KEY']) ? $_REQUEST['API_KEY'] : $API_KEY;
+            $quote = get_quote($_FIAT_TICKER, $_CRYPTO_TICKER, $_REQUESTED_TICKER, $_REQUESTED_AMOUNT, $_USER_ID, $_WALLET_ID, $_API_KEY);
             $response = $quote;
         } catch (Exception $e) {
             // $error = true;
@@ -42,8 +53,12 @@ switch($path) {
         break;
     case 'order':
         try {
+            $_QUOTE_ID = isset($_REQUEST['QUOTE_ID']) ? $_REQUEST['QUOTE_ID'] : $QUOTE_ID;
+            $_ADDRESS = isset($_REQUEST['ADDRESS']) ? $_REQUEST['ADDRESS'] : $ADDRESS;
+            $_CRYPTO_TICKER = isset($_REQUEST['CRYPTO_TICKER']) ? $_REQUEST['CRYPTO_TICKER'] : $CRYPTO_TICKER;
+            // TODO sanitize $_REQUEST inputs above
             // $quote = get_quote();
-            $order = place_order();
+            $order = place_order($_QUOTE_ID, $_ADDRESS, $_CRYPTO_TICKER);
             // $order = json_decode($order);
             // $order->quote = json_decode($quote);
             // $order = json_encode($order);
@@ -55,11 +70,11 @@ switch($path) {
         break;
     case 'redirect':
         try {
-            if (!array_key_exists('PAYMENT_ID', $_REQUEST)) {
+            if (!isset($_REQUEST['PAYMENT_ID'])) {
                 $response = json_encode(array('error' => 'true', 'message' => 'Payment ID needed to redirect'));
                 break;
             }
-            $_PAYMENT_ID = array_key_exists('PAYMENT_ID', $_REQUEST) ? $_REQUEST['PAYMENT_ID'] : $PAYMENT_ID;
+            $_PAYMENT_ID = isset($_REQUEST['PAYMENT_ID']) ? $_REQUEST['PAYMENT_ID'] : $PAYMENT_ID;
             // TODO sanitize $_REQUEST input
             $reponse = redirect($_PAYMENT_ID);
             $redirect = true;
@@ -107,7 +122,7 @@ switch($path) {
 }
 
 if ((!$error && !$redirect) || ($response === FALSE || is_null($reponse))) {
-    header('Content-Type: application/json; charset=utf-8');
+    // header('Content-Type: application/json; charset=utf-8');
 }
 echo $response;
 
