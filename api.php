@@ -62,9 +62,10 @@ switch($route) {
             }
             $_ADDRESS = isset($_REQUEST['ADDRESS']) ? $_REQUEST['ADDRESS'] : $ADDRESS;
             $_CRYPTO_TICKER = isset($_REQUEST['CRYPTO_TICKER']) ? $_REQUEST['CRYPTO_TICKER'] : $CRYPTO_TICKER;
+            $_SIGNUP_TIMESTAMP = isset($_REQUEST['SIGNUP_TIMESTAMP']) ? $_REQUEST['SIGNUP_TIMESTAMP'] : $SIGNUP_TIMESTAMP;
             // TODO sanitize $_REQUEST inputs above
             // $quote = get_quote();
-            $order = place_order($_QUOTE_ID, $_ADDRESS, $_CRYPTO_TICKER);
+            $order = place_order($_QUOTE_ID, $_ADDRESS, $_CRYPTO_TICKER, $_SIGNUP_TIMESTAMP);
             // $order = json_decode($order);
             // $order->quote = json_decode($quote);
             // $order = json_encode($order);
