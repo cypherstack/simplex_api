@@ -214,10 +214,10 @@ function get_quote(
  * @param string $_QUOTE_ID
  * @param string $_ADDRESS
  * @param ?string $_CRYPTO_TICKER
+ * @param ?string $_USER_ID
  * @param ?string $_SIGNUP_TIMESTAMP
  * @param ?string $_PAYMENT_ID
  * @param ?string $_ORDER_ID
- * @param ?string $_USER_ID
  * @param ?string $_PUBLIC_KEY
  * @param ?string $_VERSION
  * @param ?string $_REFERRAL_IP
@@ -229,10 +229,10 @@ function place_order(
     $_QUOTE_ID = null,
     $_ADDRESS = null,
     $_CRYPTO_TICKER = null,
+    $_USER_ID = null,
     $_SIGNUP_TIMESTAMP = null,
     $_PAYMENT_ID = null,
     $_ORDER_ID = null,
-    $_USER_ID = null,
     $_PUBLIC_KEY = null,
     $_VERSION = null,
     $_REFERRAL_IP = null,
