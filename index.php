@@ -18,6 +18,7 @@ $response = json_encode(array(
     'error' => $error,
     'message' => $message,
     'status' => ($error) ? 'offline' : 'online',
+    'route' => 'supported_cryptos'
     'response' => json_decode($response)
 ));
 if (!$error) {
