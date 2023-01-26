@@ -139,6 +139,7 @@ function supported_fiats(?string $_PUBLIC_KEY = null) {
  * @param ?string $_USER_ID 
  * @param ?string $_WALLET_ID 
  * @param ?string $_API_KEY 
+ * @param ?string $_REFERRAL_IP 
  * @return json Simplex quote object
  */
 function get_quote(
