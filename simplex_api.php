@@ -223,6 +223,7 @@ function get_quote(
  * @param ?string $_REFERRAL_IP
  * @param ?string $_REFERRER
  * @param ?string $_API_KEY
+ * @param ?string $_WALLET_ID
  * @return json Simplex order object
  */
 function place_order(
@@ -237,7 +238,8 @@ function place_order(
     $_VERSION = null,
     $_REFERRAL_IP = null,
     $_REFERRER = null,
-    $_API_KEY = null
+    $_API_KEY = null,
+    $_WALLET_ID = null,
 ) {
     // curl --request POST \
     //      --url https://sandbox.test-simplexcc.com/wallet/merchant/v2/payments/partner/data \
@@ -270,12 +272,13 @@ function place_order(
     $_REFERRER = is_null($_REFERRER) ? $REFERRER : $_REFERRER;
     $_API_KEY = is_null($_API_KEY) ? $API_KEY : $_API_KEY;
     $_REFERRAL_IP = is_null($_REFERRAL_IP) ? getUserIP() : $_REFERRAL_IP;
+    $_WALLET_ID = is_null($_WALLET_ID) ? $WALLET_ID : $_WALLET_ID;
     // TODO sanitize $_REQUEST inputs above
 
     $url = 'https://sandbox.test-simplexcc.com/wallet/merchant/v2/payments/partner/data';
     $data = array(
         'account_details' => array(
-            'app_provider_id' => $WALLET_ID,
+            'app_provider_id' => $_WALLET_ID,
             'app_version_id' => $_VERSION,
             'app_end_user_id' => $_USER_ID,
             'signup_login' => array(
