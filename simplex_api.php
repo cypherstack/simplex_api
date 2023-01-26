@@ -256,7 +256,7 @@ function place_order(
         return json_encode(array('error' => 'true', 'message' => 'Error placing order, no crypto ticker provided'));
     }
 
-    global $PUBLIC_KEY, $VERSION, $USER_ID, $SIGNUP_TIMESTAMP, $QUOTE_ID, $PAYMENT_ID, $ORDER_ID, $REFERRER, $CRYPTO_TICKER, $ADDRESS, $API_KEY;
+    global $PUBLIC_KEY, $VERSION, $USER_ID, $SIGNUP_TIMESTAMP, $QUOTE_ID, $PAYMENT_ID, $ORDER_ID, $REFERRER, $CRYPTO_TICKER, $ADDRESS, $API_KEY, $WALLET_ID;
     $_QUOTE_ID = is_null($_QUOTE_ID) ? $QUOTE_ID : $_QUOTE_ID;
     $_ADDRESS = is_null($_ADDRESS) ? $ADDRESS : $_ADDRESS;
     $_CRYPTO_TICKER = is_null($_CRYPTO_TICKER) ? $CRYPTO_TICKER : $_CRYPTO_TICKER;
