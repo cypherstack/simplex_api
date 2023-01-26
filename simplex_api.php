@@ -275,7 +275,7 @@ function place_order(
     $url = 'https://sandbox.test-simplexcc.com/wallet/merchant/v2/payments/partner/data';
     $data = array(
         'account_details' => array(
-            'app_provider_id' => $_PUBLIC_KEY,
+            'app_provider_id' => $WALLET_ID,
             'app_version_id' => $_VERSION,
             'app_end_user_id' => $_USER_ID,
             'signup_login' => array(
