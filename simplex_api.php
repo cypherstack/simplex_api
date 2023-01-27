@@ -240,7 +240,7 @@ function place_order(
     $_REFERRAL_IP = null,
     $_REFERRER = null,
     $_API_KEY = null,
-    $_WALLET_ID = null,
+    $_WALLET_ID = null
 ) {
     // curl --request POST \
     //      --url https://sandbox.test-simplexcc.com/wallet/merchant/v2/payments/partner/data \
