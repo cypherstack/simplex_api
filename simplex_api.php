@@ -58,7 +58,7 @@ function supported_cryptos(?string $_PUBLIC_KEY = null) {
     $_PUBLIC_KEY = is_null($_PUBLIC_KEY) ? $PUBLIC_KEY : $_PUBLIC_KEY;
     // TODO sanitize $_REQUEST inputs above
 
-    $url = "https://sandbox.test-simplexcc.com/v2/supported_crypto_currencies?public_key=$_PUBLIC_KEY";
+    $url = "https://backend-wallet-api.simplexcc.com/v2/supported_crypto_currencies?public_key=$_PUBLIC_KEY";
     $options = array(
         'http' => array(
             'header'  => "Accept: application/json\r\n",
@@ -101,7 +101,7 @@ function supported_fiats(?string $_PUBLIC_KEY = null) {
     $_PUBLIC_KEY = is_null($_PUBLIC_KEY) ? $PUBLIC_KEY : $_PUBLIC_KEY;
     // TODO sanitize $_REQUEST inputs above
 
-    $url = "https://sandbox.test-simplexcc.com/v2/supported_fiat_currencies?public_key=$_PUBLIC_KEY";
+    $url = "https://backend-wallet-api.simplexcc.com/v2/supported_fiat_currencies?public_key=$_PUBLIC_KEY";
     $options = array(
         'http' => array(
             'header'  => "Accept: application/json\r\n",
@@ -170,7 +170,7 @@ function get_quote(
     $_REFERRAL_IP = is_null($_REFERRAL_IP) ? getUserIP() : $_REFERRAL_IP;
     // TODO sanitize $_REQUEST inputs above
     
-    $url = 'https://sandbox.test-simplexcc.com/wallet/merchant/v2/quote';
+    $url = 'https://backend-wallet-api.simplexcc.com/wallet/merchant/v2/quote';
     $data = array(
         'end_user_id' => $_USER_ID,
         'digital_currency' => $_CRYPTO_TICKER,
@@ -276,7 +276,7 @@ function place_order(
     $_WALLET_ID = is_null($_WALLET_ID) ? $WALLET_ID : $_WALLET_ID;
     // TODO sanitize $_REQUEST inputs above
 
-    $url = 'https://sandbox.test-simplexcc.com/wallet/merchant/v2/payments/partner/data';
+    $url = 'https://backend-wallet-api.simplexcc.com/wallet/merchant/v2/payments/partner/data';
     $data = array(
         'account_details' => array(
             'app_provider_id' => $_WALLET_ID,
