@@ -320,6 +320,7 @@ function place_order(
         } else {
             return json_encode(array(
                 'error' => 'true',
+                'result' => $result,
                 'data' => $data,
                 'message' => 'Error placing order, bad request'
             ));
