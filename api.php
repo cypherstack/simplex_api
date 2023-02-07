@@ -3,10 +3,10 @@
 require_once("simplex_api.php");
 // TODO test functions
 
-// $route = isset($_REQUEST['ROUTE']) ? $_REQUEST['ROUTE'] : null;
-$route = explode('/',$_SERVER["REQUEST_URI"]);
-$route = array_key_exists(2, $route) ? $route[2] : $route[1];
-$route = strpos($route, '?') ? substr($route, 0, strpos($route, '?')) : $route;
+$route = isset($_REQUEST['ROUTE']) ? $_REQUEST['ROUTE'] : null;
+// $route = explode('/',$_SERVER["REQUEST_URI"]);
+// $route = array_key_exists(2, $route) ? $route[2] : $route[1];
+// $route = strpos($route, '?') ? substr($route, 0, strpos($route, '?')) : $route;
 // TODO error handle if no path given
 
 $response = null;
@@ -46,7 +46,8 @@ switch($route) {
             $_USER_ID = isset($_REQUEST['USER_ID']) ? $_REQUEST['USER_ID'] : $USER_ID;
             $_WALLET_ID = isset($_REQUEST['WALLET_ID']) ? $_REQUEST['WALLET_ID'] : $WALLET_ID;
             $_API_KEY = isset($_REQUEST['API_KEY']) ? $_REQUEST['API_KEY'] : $API_KEY;
-            $quote = get_quote($_FIAT_TICKER, $_CRYPTO_TICKER, $_REQUESTED_TICKER, $_REQUESTED_AMOUNT, $_USER_ID, $_WALLET_ID, $_API_KEY);
+            $_REFERRAL_IP = isset($_REQUEST['REFERRAL_IP']) ? $_REQUEST['REFERRAL_IP'] : getUserIP();
+            $quote = get_quote($_FIAT_TICKER, $_CRYPTO_TICKER, $_REQUESTED_TICKER, $_REQUESTED_AMOUNT, $_USER_ID, $_WALLET_ID, $_API_KEY, $_REFERRAL_IP);
             $response = $quote;
         } catch (Exception $e) {
             // $error = true;
@@ -61,9 +62,11 @@ switch($route) {
             }
             $_ADDRESS = isset($_REQUEST['ADDRESS']) ? $_REQUEST['ADDRESS'] : $ADDRESS;
             $_CRYPTO_TICKER = isset($_REQUEST['CRYPTO_TICKER']) ? $_REQUEST['CRYPTO_TICKER'] : $CRYPTO_TICKER;
+            $_USER_ID = isset($_REQUEST['USER_ID']) ? $_REQUEST['USER_ID'] : $USER_ID;
+            $_SIGNUP_TIMESTAMP = isset($_REQUEST['SIGNUP_TIMESTAMP']) ? $_REQUEST['SIGNUP_TIMESTAMP'] : $SIGNUP_TIMESTAMP;
             // TODO sanitize $_REQUEST inputs above
             // $quote = get_quote();
-            $order = place_order($_QUOTE_ID, $_ADDRESS, $_CRYPTO_TICKER);
+            $order = place_order($_QUOTE_ID, $_ADDRESS, $_CRYPTO_TICKER, $_USER_ID, $_SIGNUP_TIMESTAMP);
             // $order = json_decode($order);
             // $order->quote = json_decode($quote);
             // $order = json_encode($order);
