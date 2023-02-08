@@ -30,7 +30,7 @@ function redirect_template($_PAYMENT_ID, $_RETURN_URL_SUCCESS, $_RETURN_URL_FAIL
         </style>
     </head>
     <body>
-        <form id="payment_form" action="https://sandbox.test-simplexcc.com/payments/new" method="post">
+        <form id="payment_form" action="https://backend-wallet-api.simplexcc.com/payments/new" method="post">
             <input type="hidden" name="version" value="1">
             <input type="hidden" name="partner" value="$_WALLET_ID">
             <input type="hidden" name="payment_flow_type" value="wallet">
