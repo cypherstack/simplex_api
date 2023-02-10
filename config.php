@@ -1,5 +1,10 @@
 <?php
 
+// to ignore changes to this file if you make changes:
+// use `git update-index --skip-worktree config.php`
+// do not commit API key, public key, etc. ... to undo and commit changes, use
+// use `git update-index --no-skip-worktree config.php`
+
 $API_KEY = 'API Key';
 $PUBLIC_KEY = 'Public Key';
 $WALLET_ID = 'Wallet ID';
